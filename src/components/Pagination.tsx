@@ -12,7 +12,6 @@ export type PaginationComponentProps = {
 
 const PaginationComponent: React.FC<PaginationComponentProps> = ({ className, onClick, page, total, totalPages }) => {
   const [currentPage, setCurrentPage] = useState(page);
-  console.log('pagination component', currentPage, onClick, page, total);
 
   const handleClick = useCallback((newPage: number) => {
     setCurrentPage(newPage);
