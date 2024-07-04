@@ -16,7 +16,7 @@ export type Respository = Endpoints['GET /search/repositories']['response']['dat
 export const repositories = {
   async get(params: RepositoriesGetParams): Promise<RepositoriesGetResponse> {
     try {
-      const { data } = await axios.get(`https://api.github.com/search/repositories?sort=stars&q=javascript&per_page=${params.perPage}&page=${params.page}`) as Endpoints['GET /search/repositories']['response'];
+      const { data } = await axios.get(`/search/repositories?sort=stars&q=javascript&per_page=${params.perPage}&page=${params.page}`) as Endpoints['GET /search/repositories']['response'];
 
       return {
         items: data.items,
