@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './axios';
 import { Endpoints } from '@octokit/types';
 
 export type RepositoriesGetParams = {

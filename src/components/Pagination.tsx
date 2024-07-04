@@ -7,10 +7,12 @@ export type PaginationComponentProps = {
   onClick: RepositoriesContextT['goto'];
   page: number;
   total: number;
+  totalPages: number;
 };
 
-const PaginationComponent: React.FC<PaginationComponentProps> = ({ onClick, page, total }) => {
+const PaginationComponent: React.FC<PaginationComponentProps> = ({ className, onClick, page, total, totalPages }) => {
   const [currentPage, setCurrentPage] = useState(page);
+  console.log('pagination component', currentPage, onClick, page, total);
 
   const handleClick = useCallback((newPage: number) => {
     setCurrentPage(newPage);
@@ -18,18 +20,16 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({ onClick, page
   }, []);
 
   return (
-    <Pagination>
-      <Pagination.First onClick={() => handleClick(1)} />
-      <Pagination.Prev onClick={() => handleClick(currentPage - 1)} disabled={currentPage === 1} />
+    <Pagination className={className}>
+      <Pagination.First onClick={() => handleClick(1)} disabled={currentPage === 1}>&lt;&lt;</Pagination.First>
+      <Pagination.Prev onClick={() => handleClick(currentPage - 1)} disabled={currentPage === 1}>&lt;</Pagination.Prev>
 
-      {[...Array(total).keys()].map(pageNumber => (
-        <Pagination.Item key={pageNumber + 1} active={pageNumber + 1 === currentPage} onClick={() => handleClick(pageNumber + 1)}>
-          {pageNumber + 1}
-        </Pagination.Item>
-      ))}
+      <Pagination.Item active={true}>
+        {currentPage}
+      </Pagination.Item>
 
-      <Pagination.Next onClick={() => handleClick(currentPage + 1)} disabled={currentPage === total} />
-      <Pagination.Last onClick={() => handleClick(total)} />
+      <Pagination.Next onClick={() => handleClick(currentPage + 1)} disabled={currentPage === totalPages} />
+      <Pagination.Last onClick={() => handleClick(totalPages)} disabled={currentPage === totalPages} />
     </Pagination>
   );
 }

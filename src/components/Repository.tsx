@@ -12,7 +12,7 @@ const Repository: React.FC<RepositoryProps> = ({ repository, className }) => {
   const [flags, setFlags] = useLocalStorageState<number[]>('todos', {
     defaultValue: []
   });
-
+  console.log('repo')
   const isVisible = useMemo(() => !flags.includes(repository.id), [flags]);
 
   const handleFlagClick = useCallback(() => {

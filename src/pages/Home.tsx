@@ -21,7 +21,7 @@ const Home = () => {
         </Row>
 
         <Row>
-          <Col>
+          <Col className="d-flex">
             <PaginationRepositories />
           </Col>
         </Row>

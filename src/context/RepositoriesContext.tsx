@@ -9,6 +9,7 @@ type RepositoriesContextProps = {
 
 export type RepositoriesContextT = RepositoriesGetResponse & {
   isLoading: boolean;
+  totalPages: number;
   params: RepositoriesGetParams;
   goto: (params?: Partial<RepositoriesGetParams>) => void;
 };
@@ -19,6 +20,7 @@ const defaultState: RepositoriesContextState = {
   isLoading: true, // simple isLoading state for testing purposes, could have more complex structure,
   items: [],
   total: 0,
+  totalPages: 0,
   params: {
     page: 1,
     perPage: 10
@@ -42,14 +44,23 @@ const RepositoriesProvider = ({ children }: RepositoriesContextProps) => {
     }
   };
 
-  const [state, setState] = useState<RepositoriesContextState>(defaultState);
   const [params, setParams] = useState(getParamsObject);
+  const [state, setState] = useState<RepositoriesContextState>(() => {
+    return { ...defaultState, params };
+  });
 
   const fetchRepositories = async () => {
     try {
       setState({ ...state, isLoading: true });
       const data = await repositories.get(params);
-      setState({ ...state, ...data, isLoading: false });
+      // github only allows the fist 1000 results
+      const totalPages = Math.ceil(data.total / state.params.perPage);
+      setState({
+        ...state,
+        ...data,
+        totalPages: totalPages > 100 ? 100 : totalPages,
+        isLoading: false
+      });
     } catch (err) {
       console.error(err);
     }
@@ -58,20 +69,19 @@ const RepositoriesProvider = ({ children }: RepositoriesContextProps) => {
   // first load
   useEffect(() => {
     fetchRepositories();
-  }, []);
+  }, [params]);
 
-  // consecutive calls
+  // consecutive calls to set params, i.e. on page change
   useEffect(() => {
     // fetch only when params are different
     const newParams = getParamsObject();
-    if (newParams.perPage !== params.perPage && newParams.page !== params.page) {
+    if (newParams.perPage !== params.perPage || newParams.page !== params.page) {
       setParams(newParams);
-      fetchRepositories();
     }
   }, [location.search]);
 
   const goto = useCallback((optionalParams?: Partial<RepositoriesGetParams>) => {
-    const newParams = { ...params, optionalParams };
+    const newParams = { ...params, ...optionalParams };
     navigate(`/?perPage=${newParams.perPage}&page=${newParams.page}`)
   }, []);
 
