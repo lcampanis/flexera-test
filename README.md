@@ -6,7 +6,7 @@ Focused primarily on:
 - Typescript semantics
 - React (CRA) setup and architecture
 - EsLint setup
-- Test setup, though React doesn't seem to play out of the box. Please note that I spent some time setting up the tests, but time is of the essence, so test are present, but the setup needs some additional work to run. Something CRA should have out of the box.
+- Test setup, though React doesn't seem to play out of the box. Please note that I spent some time setting up the tests, but time is of the essence, so tests are present, but the setup needs some additional work to run. Something CRA should have out of the box.
 
 **Notes:**
 - You can optionally add your own Personal Github token, see .env.example
